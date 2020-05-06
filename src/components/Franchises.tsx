@@ -1,52 +1,126 @@
 import React, { useState, useEffect } from 'react'
-import { FranchiseListItem } from './FranchiseListItem'
 import { IFranchise } from '../models/IFranchise'
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core'
+import MUIDataTable from 'mui-datatables'
 
 export const Franchises = () => {
-  const [franchises, setFranchises] = useState<Array<IFranchise>>()
+  const [franchises, setFranchises] = useState<Array<IFranchise>>([])
+
+  const options = {
+    pagination: false,
+  }
+
+  const columns=[
+    {
+      name: "Current_Franchise_ID",
+      label: 'Current Franchise ID',
+      options: {
+        filter: true,
+        sort: true,
+      }
+    },
+    {
+      name: "Franchise_ID",
+      label: 'Franchise ID',
+      options: {
+        filter: true,
+        sort: true,
+      }
+    },
+    {
+      name: "League",
+      label: "League",
+      options: {
+        filter: true,
+        sort: true,
+      }
+    },
+    {
+      name: "Division",
+      label: 'Division',
+      options: {
+        filter: true,
+        sort: true,
+      }
+    },
+    {
+      name: "Location_Name",
+      label: 'Location Name',
+      options: {
+        filter: true,
+        sort: true,
+      }
+    },
+    {
+      name: "Nickname",
+      label: 'Nickname',
+      options: {
+        filter: true,
+        sort: true,
+      }
+    },
+    {
+      name: "Alternate_Nicknames",
+      label: "Alternate Nicknames",
+      options: {
+        filter: true,
+        sort: true,
+      }
+    },
+    {
+      name: "First_Date_Nickname_Used",
+      label: 'Used From',
+      options: {
+        filter: false,
+        sort: true,
+      }
+    },
+    {
+      name: "Last_Date_Nickname_Used",
+      label: 'Used Until',
+      options: {
+        filter: false,
+        sort: true,
+      }
+    },
+    {
+      name: "City",
+      label: 'City',
+      options: {
+        filter: true,
+        sort: true,
+      }
+    },
+    {
+      name: "State",
+      label: "State",
+      options: {
+        filter: true,
+        sort: true,
+      }
+    },
+  ]
 
   useEffect(() => {
-    const getFranchises = async() => (
-      await fetch('https://mbents.github.io/rs-data/franchises/')
-        .then(response => response.json())
-        .then(data => setFranchises(data))
-        .catch(error => console.log(error))
-    )
+    if (franchises?.length === 0) {
+      const getFranchises = async() => (
+        await fetch('https://mbents.github.io/rs-data/franchises/')
+          .then(response => response.json())
+          .then(data => setFranchises(data))
+          .catch(error => console.log(error))
+      )
 
-    getFranchises()
+      getFranchises()
+    }
   })
 
   return (
     <React.Fragment>
-      <h3>MLB Franchises</h3>
-      <TableContainer component={Paper}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">Current Franchise ID</TableCell>
-              <TableCell align="right">Franchise ID</TableCell>
-              <TableCell align="right">League</TableCell>
-              <TableCell align="right">Division</TableCell>
-              <TableCell align="right">Location Name</TableCell>
-              <TableCell align="right">Nickname</TableCell>
-              <TableCell align="right">Alternate Nicknames</TableCell>
-              <TableCell align="right">Used From</TableCell>
-              <TableCell align="right">Used Until</TableCell>
-              <TableCell align="right">City</TableCell>
-              <TableCell align="right">State</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-          {franchises?.map((franchise, index) =>
-            <FranchiseListItem
-              franchise={franchise}
-              index={index}
-            />
-          )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <MUIDataTable
+        title={"MLB Franchises"}
+        columns={columns}
+        data={franchises}
+        options={options}
+      />
     </React.Fragment>
   )
 }
