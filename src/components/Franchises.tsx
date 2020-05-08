@@ -7,6 +7,8 @@ export const Franchises = () => {
 
   const options = {
     pagination: false,
+    print: false,
+    selectableRows: "none" as const
   }
 
   const columns=[
