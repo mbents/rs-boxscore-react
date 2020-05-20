@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import './App.css'
 import { Franchises } from './components/Franchises'
 import { Ballparks } from './components/Ballparks'
+import { Boxscores } from './components/Boxscores'
 import { Boxscore } from './components/Boxscore'
 import { AppBar, Tabs, Tab } from '@material-ui/core'
 import { Home } from './components/Home'
@@ -30,13 +31,17 @@ function App() {
             <Tab value={0} icon={<HomeIcon />} label="Home" component={Link} to="/" />
             <Tab value={1} icon={<EventSeatIcon />} label="Ballparks" component={Link} to="/ballparks" />
             <Tab value={2} icon={<GroupIcon />} label="Franchises" component={Link} to="/franchises" />
-            <Tab value={3} icon={<ListAltIcon />} label="Boxscores" component={Link} to="/boxscore" />
+            <Tab value={3} icon={<ListAltIcon />} label="Boxscores" component={Link} to="/boxscores" />
           </Tabs>
         </AppBar>
         <Switch>
           <Route path="/ballparks" component={Ballparks} />
           <Route path="/franchises" component={Franchises} />
-          <Route path="/boxscore" component={Boxscore} />
+          <Route exact path="/boxscores" component={Boxscores} />
+          <Route 
+            path="/boxscores/:gameId"
+            render={(props) => <Boxscore {...props} />}
+          />
           <Route path="/" component={Home} />
         </Switch>
       </div>
