@@ -5,7 +5,7 @@ import { Franchises } from './components/Franchises'
 import { Ballparks } from './components/Ballparks'
 import { Boxscores } from './components/Boxscores'
 import { Boxscore } from './components/Boxscore'
-import { AppBar, Tabs, Tab } from '@material-ui/core'
+import { AppBar, Tabs, Tab, Container } from '@material-ui/core'
 import { Home } from './components/Home'
 import HomeIcon from '@material-ui/icons/Home'
 import EventSeatIcon from '@material-ui/icons/EventSeat'
@@ -34,16 +34,18 @@ function App() {
             <Tab value={3} icon={<ListAltIcon />} label="Boxscores" component={Link} to="/boxscores" />
           </Tabs>
         </AppBar>
-        <Switch>
-          <Route path="/ballparks" component={Ballparks} />
-          <Route path="/franchises" component={Franchises} />
-          <Route exact path="/boxscores" component={Boxscores} />
-          <Route 
-            path="/boxscores/:gameId"
-            render={(props) => <Boxscore {...props} />}
-          />
-          <Route path="/" component={Home} />
-        </Switch>
+        <Container maxWidth="lg">
+          <Switch>
+            <Route path="/ballparks" component={Ballparks} />
+            <Route path="/franchises" component={Franchises} />
+            <Route exact path="/boxscores" component={Boxscores} />
+            <Route 
+              path="/boxscores/:gameId"
+              render={(props) => <Boxscore {...props} />}
+            />
+            <Route path="/" component={Home} />
+          </Switch>
+        </Container>
       </div>
     </Router>
   )
