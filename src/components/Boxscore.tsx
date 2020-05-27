@@ -5,6 +5,8 @@ import { getDateString } from '../services/getDateString'
 import useBallparkService from '../services/useBallparkService'
 import { IBallpark } from '../models/IBallpark'
 import usePlayerService from '../services/usePlayerService'
+import { Score } from './Score'
+import { Typography, Grid } from '@material-ui/core'
 
 export const Boxscore = (props: any) => {
   const [currentBoxscore, setCurrentBoxscore] = useState<IBoxscore>(null)
@@ -32,14 +34,18 @@ export const Boxscore = (props: any) => {
   }, [currentBoxscore, props.location.state.boxscore])
 
   return (
-    <h5>
-      {currentBoxscore && players.length > 0 &&
-      <React.Fragment>
-        <p>{getDateString(currentBoxscore?.date)}</p>
-        <p>{`${ballpark?.NAME}, ${ballpark?.CITY}, ${ballpark?.STATE}`}</p>
-        <Lineup boxscore={currentBoxscore} players={players} />
-      </React.Fragment>
-      }
-    </h5>
+    currentBoxscore && players.length > 0 &&
+    <React.Fragment>
+      <Grid container justify="space-evenly">
+        <Grid item>
+          <Typography>{getDateString(currentBoxscore?.date)}</Typography>
+          <Typography>{`${ballpark?.NAME}, ${ballpark?.CITY}, ${ballpark?.STATE}`}</Typography>
+          <Score boxscore={currentBoxscore} />
+        </Grid>
+        <Grid item>
+          <Lineup boxscore={currentBoxscore} players={players} />
+        </Grid>
+      </Grid>
+    </React.Fragment>
   )
 }
