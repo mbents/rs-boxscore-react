@@ -34,6 +34,11 @@ export const Boxscore = (props: any) => {
     }
   }, [currentBoxscore, props.location.state.boxscore])
 
+  const getTimeOfGame = (minutes: string) => {
+    const minutesNumber = parseInt(minutes)
+    return `${Math.floor(minutesNumber / 60)}:${minutesNumber % 60}`
+  }
+
   return (
     currentBoxscore && players.length > 0 &&
     <React.Fragment>
@@ -43,6 +48,8 @@ export const Boxscore = (props: any) => {
           <Typography>{`${ballpark?.NAME}, ${ballpark?.CITY}, ${ballpark?.STATE}`}</Typography>
           <Score boxscore={currentBoxscore} />
           <Umpires boxscore={currentBoxscore} players={players} />
+          <p>{`Attendance \u2013 ${currentBoxscore.attendance}`}</p>
+          <p>{`Time of game \u2013 ${getTimeOfGame(currentBoxscore.time_of_game)}`}</p>
         </Grid>
         <Grid item>
           <Lineup boxscore={currentBoxscore} players={players} />
