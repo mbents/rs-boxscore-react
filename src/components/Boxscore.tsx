@@ -7,6 +7,7 @@ import { IBallpark } from '../models/IBallpark'
 import usePlayerService from '../services/usePlayerService'
 import { Score } from './Score'
 import { Typography, Grid } from '@material-ui/core'
+import { Umpires } from './Umpires'
 
 export const Boxscore = (props: any) => {
   const [currentBoxscore, setCurrentBoxscore] = useState<IBoxscore>(null)
@@ -41,6 +42,7 @@ export const Boxscore = (props: any) => {
           <Typography>{getDateString(currentBoxscore?.date)}</Typography>
           <Typography>{`${ballpark?.NAME}, ${ballpark?.CITY}, ${ballpark?.STATE}`}</Typography>
           <Score boxscore={currentBoxscore} />
+          <Umpires boxscore={currentBoxscore} players={players} />
         </Grid>
         <Grid item>
           <Lineup boxscore={currentBoxscore} players={players} />
