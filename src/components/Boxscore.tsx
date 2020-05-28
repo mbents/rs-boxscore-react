@@ -8,6 +8,7 @@ import usePlayerService from '../services/usePlayerService'
 import { Score } from './Score'
 import { Typography, Grid } from '@material-ui/core'
 import { Umpires } from './Umpires'
+import { Wind } from './Wind'
 
 export const Boxscore = (props: any) => {
   const [currentBoxscore, setCurrentBoxscore] = useState<IBoxscore>(null)
@@ -50,6 +51,10 @@ export const Boxscore = (props: any) => {
           <Umpires boxscore={currentBoxscore} players={players} />
           <p>{`Attendance \u2013 ${currentBoxscore.attendance}`}</p>
           <p>{`Time of game \u2013 ${getTimeOfGame(currentBoxscore.time_of_game)}`}</p>
+          <Wind
+            windDirection={currentBoxscore.wind_direction}
+            windSpeed={currentBoxscore.wind_speed}
+          />
         </Grid>
         <Grid item>
           <Lineup boxscore={currentBoxscore} players={players} />
