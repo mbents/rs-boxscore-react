@@ -5,7 +5,6 @@ const usePlayerService = () => {
   const [players, setPlayers] = useState<Array<IPlayer>>([])
 
   useEffect(() => {
-    console.log('useEffect in usePlayerService')
     const getPlayers = async() => {
       await fetch('https://mbents.github.io/rs-data/players/')
         .then(response => response.json())
