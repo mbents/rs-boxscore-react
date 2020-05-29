@@ -1,9 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { Select, FormControl, InputLabel } from '@material-ui/core'
 import { IBoxscore } from '../models/IBoxscore'
+import { IFranchise } from '../models/IFranchise'
+import _ from 'lodash'
 
 export const Boxscores = (props: any) => {
   const [boxscores, setBoxscores] = useState<Array<IBoxscore>>([])
+  const [franchises, setFranchises] = useState<Array<IFranchise>>([])
+
+  useEffect(() => {
+    const getFranchises = async() => {
+      await fetch('https://mbents.github.io/rs-data/franchises')
+          .then(response => response.json())
+          .then(data => {
+            const uniqueFranchises = _.uniqBy(data, 'Franchise_ID')
+            setFranchises(_.sortBy(uniqueFranchises, 'Franchise_ID'))
+          })
+          .catch(error => console.log(error))
+    }
+
+    getFranchises()
+  }, [])
 
   useEffect(() => {
     if (boxscores.length === 0) {
@@ -28,8 +45,29 @@ export const Boxscores = (props: any) => {
     }
   }
 
+  const handleFranchiseChange = (event: { currentTarget: any }) => {
+    console.log(event.currentTarget.value)
+  }
+
   return (
     <React.Fragment>
+      <FormControl>
+        <InputLabel htmlFor="franchises">Franchises</InputLabel>
+        <Select
+          id="franchises"
+          label="Franchises"
+          autoWidth
+          native
+          onChange={handleFranchiseChange}
+        >
+          <option value="" />
+          {franchises.map(item =>
+            <option key={item.Franchise_ID} value={item.Current_Franchise_ID}>
+              {`${item.Location_Name} ${item.Nickname} (${item.First_Date_Nickname_Used} \u2013 ${item.Last_Date_Nickname_Used || 'present'})`}
+            </option>
+          )}
+        </Select>
+      </FormControl>
       <FormControl>
         <InputLabel htmlFor="games">Games</InputLabel>
         <Select
