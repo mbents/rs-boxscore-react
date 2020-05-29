@@ -15,8 +15,8 @@ export const Boxscores = (props: any) => {
       await fetch('https://mbents.github.io/rs-data/franchises')
           .then(response => response.json())
           .then(data => {
-            const uniqueFranchises = _.uniqBy(data, 'Franchise_ID')
-            setFranchises(_.sortBy(uniqueFranchises, 'Franchise_ID'))
+            const uniqueFranchises = _.uniqBy(data, 'Current_Franchise_ID')
+            setFranchises(_.sortBy(uniqueFranchises, 'Current_Franchise_ID'))
           })
           .catch(error => console.log(error))
     }
@@ -55,18 +55,18 @@ export const Boxscores = (props: any) => {
     <Grid container justify="space-evenly">
       <Grid item>
         <FormControl>
-          <InputLabel htmlFor="franchises">Franchises</InputLabel>
+          <InputLabel htmlFor="franchises">Team</InputLabel>
           <Select
             id="franchises"
-            label="Franchises"
+            label="Team"
             autoWidth
             native
             onChange={handleFranchiseChange}
           >
             <option value="" />
             {franchises.map(item =>
-              <option key={item.Franchise_ID} value={item.Current_Franchise_ID}>
-                {`${item.Location_Name} ${item.Nickname} (${item.First_Date_Nickname_Used} \u2013 ${item.Last_Date_Nickname_Used || 'present'})`}
+              <option key={item.Current_Franchise_ID} value={item.Current_Franchise_ID}>
+                {item.Current_Franchise_ID}
               </option>
             )}
           </Select>
