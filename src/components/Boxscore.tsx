@@ -37,7 +37,8 @@ export const Boxscore = (props: any) => {
 
   const getTimeOfGame = (minutes: string) => {
     const minutesNumber = parseInt(minutes)
-    return `${Math.floor(minutesNumber / 60)}:${minutesNumber % 60}`
+    const remainder = minutesNumber % 60
+    return `${Math.floor(minutesNumber / 60)}:${remainder < 10 ? '0' : ''}${remainder}`
   }
 
   return (
