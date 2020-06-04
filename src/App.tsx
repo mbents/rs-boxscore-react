@@ -3,21 +3,31 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import './App.css'
 import { Franchises } from './components/Franchises'
 import { Ballparks } from './components/Ballparks'
-import { Boxscores } from './components/Boxscores'
+import Boxscores from './components/Boxscores'
 import { Boxscore } from './components/Boxscore'
-import { AppBar, Tabs, Tab, Container } from '@material-ui/core'
+import { AppBar, Tabs, Tab, Container, Drawer, Typography } from '@material-ui/core'
 import { Home } from './components/Home'
 import HomeIcon from '@material-ui/icons/Home'
 import EventSeatIcon from '@material-ui/icons/EventSeat'
 import GroupIcon from '@material-ui/icons/Group'
 import ListAltIcon from '@material-ui/icons/ListAlt'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles({
+  containerMargin: {
+    marginTop: '5px'
+  },
+})
 
 function App() {
   const [currentTab, setCurrentTab] = useState(0)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setCurrentTab(newValue)
   }
+
+  const classes = useStyles()
 
   return (
     <Router>
@@ -31,10 +41,10 @@ function App() {
             <Tab value={0} icon={<HomeIcon />} label="Home" component={Link} to="/" />
             <Tab value={1} icon={<EventSeatIcon />} label="Ballparks" component={Link} to="/ballparks" />
             <Tab value={2} icon={<GroupIcon />} label="Franchises" component={Link} to="/franchises" />
-            <Tab value={3} icon={<ListAltIcon />} label="Boxscores" component={Link} to="/boxscores" />
+            <Tab value={3} icon={<ListAltIcon />} label="Boxscores" onClick={() => setIsDrawerOpen(true)} />
           </Tabs>
         </AppBar>
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" className={classes.containerMargin}>
           <Switch>
             <Route path="/ballparks" component={Ballparks} />
             <Route path="/franchises" component={Franchises} />
@@ -46,6 +56,16 @@ function App() {
             <Route path="/" component={Home} />
           </Switch>
         </Container>
+        <Drawer
+          anchor="right"
+          open={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+        >
+          <Container maxWidth="sm" className={classes.containerMargin}>
+            <Typography variant="h6">Search boxscores</Typography>
+            <Boxscores />
+          </Container>
+        </Drawer>
       </div>
     </Router>
   )

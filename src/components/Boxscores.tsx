@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import { withRouter } from 'react-router-dom'
 import { Select, FormControl, InputLabel, Grid, Button } from '@material-ui/core'
 import { IBoxscore } from '../models/IBoxscore'
 import { IFranchise } from '../models/IFranchise'
 import _ from 'lodash'
 
-export const Boxscores = (props: any) => {
+const Boxscores = (props) => {
   const [boxscores, setBoxscores] = useState<Array<IBoxscore>>([])
   const [franchises, setFranchises] = useState<Array<IFranchise>>([])
   const [selectedFranchise, setSelectedFranchise] = useState(null)
@@ -52,8 +53,8 @@ export const Boxscores = (props: any) => {
   }
 
   return (
-    <Grid container justify="space-evenly">
-      <Grid item>
+    <React.Fragment>
+      <Grid container>
         <FormControl>
           <InputLabel htmlFor="franchises">Team</InputLabel>
           <Select
@@ -72,7 +73,7 @@ export const Boxscores = (props: any) => {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item>
+      <Grid container>
         <FormControl>
           <InputLabel htmlFor="year">Year</InputLabel>
           <Select
@@ -89,12 +90,12 @@ export const Boxscores = (props: any) => {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item>
+      <Grid container>
         <Button variant="contained" color="primary" onClick={handleClick}>
           Go
         </Button>
       </Grid>
-      <Grid item>
+      <Grid container>
         {boxscores.length > 0 &&
         <FormControl>
           <InputLabel htmlFor="games">Games</InputLabel>
@@ -112,6 +113,8 @@ export const Boxscores = (props: any) => {
           </Select>
         </FormControl>}
       </Grid>
-    </Grid>
+    </React.Fragment>
   )
 }
+
+export default withRouter(Boxscores)
