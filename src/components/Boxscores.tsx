@@ -54,64 +54,72 @@ const Boxscores = (props) => {
 
   return (
     <React.Fragment>
-      <Grid container>
-        <FormControl>
-          <InputLabel htmlFor="franchises">Team</InputLabel>
-          <Select
-            id="franchises"
-            label="Team"
-            autoWidth
-            native
-            onChange={handleFranchiseChange}
-          >
-            <option value="" />
-            {franchises.map(item =>
-              <option key={item.Current_Franchise_ID} value={item.Current_Franchise_ID}>
-                {item.Current_Franchise_ID}
-              </option>
-            )}
-          </Select>
-        </FormControl>
+      <Grid container spacing={2}>
+        <Grid item>
+          <FormControl>
+            <InputLabel htmlFor="franchises">Team</InputLabel>
+            <Select
+              id="franchises"
+              label="Team"
+              autoWidth
+              native
+              onChange={handleFranchiseChange}
+            >
+              <option value="" />
+              {franchises.map(item =>
+                <option key={item.Current_Franchise_ID} value={item.Current_Franchise_ID}>
+                  {item.Current_Franchise_ID}
+                </option>
+              )}
+            </Select>
+          </FormControl>
+        </Grid>
       </Grid>
-      <Grid container>
-        <FormControl>
-          <InputLabel htmlFor="year">Year</InputLabel>
-          <Select
-            id="year"
-            label="Year"
-            autoWidth
-            native
-            onChange={handleYearChange}
-          >
-            <option value="" />
-            {_.range(2013, 1920, -1).map(year =>
-              <option key={year} value={year}>{year}</option>
-            )}
-          </Select>
-        </FormControl>
+      <Grid container spacing={2}>
+        <Grid item>
+          <FormControl>
+            <InputLabel htmlFor="year">Year</InputLabel>
+            <Select
+              id="year"
+              label="Year"
+              autoWidth
+              native
+              onChange={handleYearChange}
+            >
+              <option value="" />
+              {_.range(2013, 1920, -1).map(year =>
+                <option key={year} value={year}>{year}</option>
+              )}
+            </Select>
+          </FormControl>
+        </Grid>
       </Grid>
-      <Grid container>
-        <Button variant="contained" color="primary" onClick={handleClick}>
-          Go
-        </Button>
+      <Grid container spacing={2}>
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={handleClick}>
+            Go
+          </Button>
+        </Grid>
       </Grid>
-      <Grid container>
+      <Grid container spacing={2}>
         {boxscores.length > 0 &&
-        <FormControl>
-          <InputLabel htmlFor="games">Games</InputLabel>
-          <Select
-            id="games"
-            label="Games"
-            autoWidth
-            native
-            onChange={handleChange}
-          >
-            <option value="" />
-            {boxscores.map(item =>
-              <option key={item.game_id} value={item.game_id}>{item.game_id}</option>
-            )}
-          </Select>
-        </FormControl>}
+        <Grid item>
+          <FormControl>
+            <InputLabel htmlFor="games">Games</InputLabel>
+            <Select
+              id="games"
+              label="Games"
+              autoWidth
+              native
+              onChange={handleChange}
+            >
+              <option value="" />
+              {boxscores.map(item =>
+                <option key={item.game_id} value={item.game_id}>{item.game_id}</option>
+              )}
+            </Select>
+          </FormControl>
+        </Grid>}
       </Grid>
     </React.Fragment>
   )
