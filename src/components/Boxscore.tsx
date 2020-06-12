@@ -29,10 +29,7 @@ export const Boxscore = (props: any) => {
   }, [ballparks, currentBoxscore])
 
   useEffect(() => {
-    if (currentBoxscore === null) {
-      setCurrentBoxscore(props.location.state.boxscore)
-      console.log(props.location.state.boxscore)
-    }
+    setCurrentBoxscore(props.location.state.boxscore)
   }, [currentBoxscore, props.location.state.boxscore])
 
   const getTimeOfGame = (minutes: string) => {
