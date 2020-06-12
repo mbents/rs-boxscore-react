@@ -29,16 +29,16 @@ export const Score: React.FC<IScore> = (props) => {
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell>{props.boxscore.home_team}</TableCell>
-            <TableCell>{props.boxscore.home_final_score}</TableCell>
-            <TableCell>{props.boxscore.home_hits}</TableCell>
-            <TableCell>{props.boxscore.home_errors}</TableCell>
-          </TableRow>
-          <TableRow>
             <TableCell>{props.boxscore.visiting_team}</TableCell>
             <TableCell>{props.boxscore.visitor_final_score}</TableCell>
             <TableCell>{props.boxscore.visitor_hits}</TableCell>
             <TableCell>{props.boxscore.visitor_errors}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>{props.boxscore.home_team}</TableCell>
+            <TableCell>{props.boxscore.home_final_score}</TableCell>
+            <TableCell>{props.boxscore.home_hits}</TableCell>
+            <TableCell>{props.boxscore.home_errors}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
