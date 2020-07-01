@@ -1,53 +1,51 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Select, FormControl, InputLabel, Grid, Button } from '@material-ui/core'
-import { IBoxscore } from '../models/IBoxscore'
-import { IFranchise } from '../models/IFranchise'
 import _ from 'lodash'
+import { SearchContext } from '../store/SearchContext'
+import { observer } from 'mobx-react'
 
 const Boxscores = (props) => {
-  const [boxscores, setBoxscores] = useState<Array<IBoxscore>>([])
-  const [franchises, setFranchises] = useState<Array<IFranchise>>([])
-  const [selectedFranchise, setSelectedFranchise] = useState(null)
-  const [selectedYear, setSelectedYear] = useState(null)
+  const searchContext = useContext(SearchContext)
 
   useEffect(() => {
     const getFranchises = async() => {
       await fetch('https://mbents.github.io/rs-data/franchises')
-          .then(response => response.json())
-          .then(data => {
-            const uniqueFranchises = _.uniqBy(data, 'Current_Franchise_ID')
-            setFranchises(_.sortBy(uniqueFranchises, 'Current_Franchise_ID'))
-          })
-          .catch(error => console.log(error))
+        .then(response => response.json())
+        .then(data => {
+          const uniqueFranchises = _.uniqBy(data, 'Current_Franchise_ID')
+          const temp = _.sortBy(uniqueFranchises, 'Current_Franchise_ID')
+          searchContext.updateFranchises(temp)
+        })
+        .catch(error => console.log(error))
     }
 
     getFranchises()
-  }, [])
+  }, [searchContext])
 
   const handleChange = (event: { currentTarget: any }) => {
     if (event.currentTarget.value) {
-      const result = boxscores.filter(item => item.game_id === event.currentTarget.value)
+      const result = searchContext.getBoxscores.filter(item => item.game_id === event.currentTarget.value)
       props.history.push({
         pathname: `/boxscores/${event.currentTarget.value}`,
-        state: { boxscore: result[0] }
+        state: { boxscore: {...result[0]} }
       })
     }
   }
 
   const handleFranchiseChange = (event: { currentTarget: any }) => {
-    setSelectedFranchise(event.currentTarget.value)
+    searchContext.updateFranchise(event.currentTarget.value)
   }
 
   const handleYearChange = (event: { currentTarget: any }) => {
-    setSelectedYear(event.currentTarget.value)
+    searchContext.updateYear(event.currentTarget.value)
   }
 
   const handleClick = async() => {
-    if (selectedYear && selectedFranchise) {
-      await fetch(`https://mbents.github.io/rs-data/games/${selectedYear}${selectedFranchise}.json`)
+    if (searchContext.getSelectedYear && searchContext.getSelectedFranchise) {
+      await fetch(`https://mbents.github.io/rs-data/games/${searchContext.getSelectedYear}${searchContext.getSelectedFranchise}.json`)
         .then(response => response.json())
-        .then(data => setBoxscores(data))
+        .then(data => searchContext.updateBoxscores(data))
         .catch(error => console.log(error))
     }
   }
@@ -64,9 +62,10 @@ const Boxscores = (props) => {
               autoWidth
               native
               onChange={handleFranchiseChange}
+              value={searchContext.getSelectedFranchise || ''}
             >
               <option value="" />
-              {franchises.map(item =>
+              {searchContext.getFranchises.map(item =>
                 <option key={item.Current_Franchise_ID} value={item.Current_Franchise_ID}>
                   {item.Current_Franchise_ID}
                 </option>
@@ -85,6 +84,7 @@ const Boxscores = (props) => {
               autoWidth
               native
               onChange={handleYearChange}
+              value={searchContext.getSelectedYear || ''}
             >
               <option value="" />
               {_.range(2013, 1920, -1).map(year =>
@@ -102,7 +102,7 @@ const Boxscores = (props) => {
         </Grid>
       </Grid>
       <Grid container spacing={2}>
-        {boxscores.length > 0 &&
+        {searchContext.getBoxscores.length > 0 &&
         <Grid item>
           <FormControl>
             <InputLabel htmlFor="games">Games</InputLabel>
@@ -114,7 +114,7 @@ const Boxscores = (props) => {
               onChange={handleChange}
             >
               <option value="" />
-              {boxscores.map(item =>
+              {searchContext.getBoxscores.map(item =>
                 <option key={item.game_id} value={item.game_id}>{item.game_id}</option>
               )}
             </Select>
@@ -125,4 +125,4 @@ const Boxscores = (props) => {
   )
 }
 
-export default withRouter(Boxscores)
+export default withRouter(observer(Boxscores))

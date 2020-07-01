@@ -12,6 +12,8 @@ import EventSeatIcon from '@material-ui/icons/EventSeat'
 import GroupIcon from '@material-ui/icons/Group'
 import ListAltIcon from '@material-ui/icons/ListAlt'
 import { makeStyles } from '@material-ui/core/styles'
+import { SearchStore } from './store/SearchStore'
+import { SearchContext } from './store/SearchContext'
 
 const useStyles = makeStyles({
   containerMargin: {
@@ -27,47 +29,50 @@ function App() {
     setCurrentTab(newValue)
   }
 
+  const store = new SearchStore()
   const classes = useStyles()
 
   return (
-    <Router>
-      <div className="App">
-        <AppBar position="static">
-          <Tabs
-            onChange={handleChange}
-            value={currentTab}
-            centered
-          >
-            <Tab value={0} icon={<HomeIcon />} label="Home" component={Link} to="/" />
-            <Tab value={1} icon={<EventSeatIcon />} label="Ballparks" component={Link} to="/ballparks" />
-            <Tab value={2} icon={<GroupIcon />} label="Franchises" component={Link} to="/franchises" />
-            <Tab value={3} icon={<ListAltIcon />} label="Boxscores" onClick={() => setIsDrawerOpen(true)} />
-          </Tabs>
-        </AppBar>
-        <Container maxWidth="lg" className={classes.containerMargin}>
-          <Switch>
-            <Route path="/ballparks" component={Ballparks} />
-            <Route path="/franchises" component={Franchises} />
-            <Route exact path="/boxscores" component={Boxscores} />
-            <Route 
-              path="/boxscores/:gameId"
-              render={(props) => <Boxscore {...props} />}
-            />
-            <Route path="/" component={Home} />
-          </Switch>
-        </Container>
-        <Drawer
-          anchor="right"
-          open={isDrawerOpen}
-          onClose={() => setIsDrawerOpen(false)}
-        >
-          <Container maxWidth="sm" className={classes.containerMargin}>
-            <Typography variant="h6">Search boxscores</Typography>
-            <Boxscores />
+    <SearchContext.Provider value={store}>
+      <Router>
+        <div className="App">
+          <AppBar position="static">
+            <Tabs
+              onChange={handleChange}
+              value={currentTab}
+              centered
+            >
+              <Tab value={0} icon={<HomeIcon />} label="Home" component={Link} to="/" />
+              <Tab value={1} icon={<EventSeatIcon />} label="Ballparks" component={Link} to="/ballparks" />
+              <Tab value={2} icon={<GroupIcon />} label="Franchises" component={Link} to="/franchises" />
+              <Tab value={3} icon={<ListAltIcon />} label="Boxscores" onClick={() => setIsDrawerOpen(true)} />
+            </Tabs>
+          </AppBar>
+          <Container maxWidth="lg" className={classes.containerMargin}>
+            <Switch>
+              <Route path="/ballparks" component={Ballparks} />
+              <Route path="/franchises" component={Franchises} />
+              <Route exact path="/boxscores" component={Boxscores} />
+              <Route 
+                path="/boxscores/:gameId"
+                render={(props) => <Boxscore {...props} />}
+              />
+              <Route path="/" component={Home} />
+            </Switch>
           </Container>
-        </Drawer>
-      </div>
-    </Router>
+          <Drawer
+            anchor="right"
+            open={isDrawerOpen}
+            onClose={() => setIsDrawerOpen(false)}
+          >
+            <Container maxWidth="sm" className={classes.containerMargin}>
+              <Typography variant="h6">Search boxscores</Typography>
+              <Boxscores />
+            </Container>
+          </Drawer>
+        </div>
+      </Router>
+    </SearchContext.Provider>
   )
 }
 
