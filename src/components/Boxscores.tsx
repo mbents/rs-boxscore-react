@@ -1,12 +1,12 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Select, FormControl, InputLabel, Grid, Button } from '@material-ui/core'
 import _ from 'lodash'
-import { SearchContext } from '../store/SearchContext'
 import { observer } from 'mobx-react'
+import { useStore } from '../App'
 
 const Boxscores = (props) => {
-  const searchContext = useContext(SearchContext)
+  const store = useStore()
 
   useEffect(() => {
     const getFranchises = async() => {
@@ -15,17 +15,17 @@ const Boxscores = (props) => {
         .then(data => {
           const uniqueFranchises = _.uniqBy(data, 'Current_Franchise_ID')
           const temp = _.sortBy(uniqueFranchises, 'Current_Franchise_ID')
-          searchContext.updateFranchises(temp)
+          store.updateFranchises(temp)
         })
         .catch(error => console.log(error))
     }
 
     getFranchises()
-  }, [searchContext])
+  }, [store])
 
   const handleChange = (event: { currentTarget: any }) => {
     if (event.currentTarget.value) {
-      const result = searchContext.getBoxscores.filter(item => item.game_id === event.currentTarget.value)
+      const result = store.getBoxscores.filter(item => item.game_id === event.currentTarget.value)
       props.history.push({
         pathname: `/boxscores/${event.currentTarget.value}`,
         state: { boxscore: {...result[0]} }
@@ -34,18 +34,18 @@ const Boxscores = (props) => {
   }
 
   const handleFranchiseChange = (event: { currentTarget: any }) => {
-    searchContext.updateFranchise(event.currentTarget.value)
+    store.updateFranchise(event.currentTarget.value)
   }
 
   const handleYearChange = (event: { currentTarget: any }) => {
-    searchContext.updateYear(event.currentTarget.value)
+    store.updateYear(event.currentTarget.value)
   }
 
   const handleClick = async() => {
-    if (searchContext.getSelectedYear && searchContext.getSelectedFranchise) {
-      await fetch(`https://mbents.github.io/rs-data/games/${searchContext.getSelectedYear}${searchContext.getSelectedFranchise}.json`)
+    if (store.getSelectedYear && store.getSelectedFranchise) {
+      await fetch(`https://mbents.github.io/rs-data/games/${store.getSelectedYear}${store.getSelectedFranchise}.json`)
         .then(response => response.json())
-        .then(data => searchContext.updateBoxscores(data))
+        .then(data => store.updateBoxscores(data))
         .catch(error => console.log(error))
     }
   }
@@ -62,10 +62,10 @@ const Boxscores = (props) => {
               autoWidth
               native
               onChange={handleFranchiseChange}
-              value={searchContext.getSelectedFranchise || ''}
+              value={store.getSelectedFranchise || ''}
             >
               <option value="" />
-              {searchContext.getFranchises.map(item =>
+              {store.getFranchises.map(item =>
                 <option key={item.Current_Franchise_ID} value={item.Current_Franchise_ID}>
                   {item.Current_Franchise_ID}
                 </option>
@@ -84,7 +84,7 @@ const Boxscores = (props) => {
               autoWidth
               native
               onChange={handleYearChange}
-              value={searchContext.getSelectedYear || ''}
+              value={store.getSelectedYear || ''}
             >
               <option value="" />
               {_.range(2013, 1920, -1).map(year =>
@@ -102,7 +102,7 @@ const Boxscores = (props) => {
         </Grid>
       </Grid>
       <Grid container spacing={2}>
-        {searchContext.getBoxscores.length > 0 &&
+        {store.getBoxscores.length > 0 &&
         <Grid item>
           <FormControl>
             <InputLabel htmlFor="games">Games</InputLabel>
@@ -114,7 +114,7 @@ const Boxscores = (props) => {
               onChange={handleChange}
             >
               <option value="" />
-              {searchContext.getBoxscores.map(item =>
+              {store.getBoxscores.map(item =>
                 <option key={item.game_id} value={item.game_id}>{item.game_id}</option>
               )}
             </Select>

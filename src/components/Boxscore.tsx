@@ -9,8 +9,9 @@ import { Score } from './Score'
 import { Typography, Grid } from '@material-ui/core'
 import { Umpires } from './Umpires'
 import { WeatherConditions } from './WeatherConditions'
+import { observer } from 'mobx-react'
 
-export const Boxscore = (props: any) => {
+const Boxscore = (props: any) => {
   const [currentBoxscore, setCurrentBoxscore] = useState<IBoxscore>(null)
   const [ballpark, setBallpark] = useState<IBallpark>()
 
@@ -58,3 +59,5 @@ export const Boxscore = (props: any) => {
     </React.Fragment>
   )
 }
+
+export default observer(Boxscore)
